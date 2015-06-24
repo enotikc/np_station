@@ -1,0 +1,993 @@
+{% load widget_tweaks %}
+<!DOCTYPE HTML>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<title>Never Paranoid Station</title>
+		
+	<!-- 	<link rel="stylesheet" href="/static/styles/style.css"/> -->
+		<link rel="stylesheet" href="/static/styles/bootstrap.min.css"/>
+		<link rel="stylesheet" href="/static/styles/bootstrap.css"/>
+		<link rel="stylesheet" href="/static/styles/bootstrap-theme.min.css"/>
+		<script type="text/javascript" src="/static/scripts/jquery-1.11.0.min.js"></script>
+		<link href="http://bootstrap-ru.com/204/assets/css/bootstrap-responsive.css" rel="stylesheet">
+		<style type="text/css">body{padding-top:60px;padding-bottom:40px;}.sidebar-nav{padding:9px 0;}</style>
+		<script type="text/javascript" src="/static/scripts/bootstrap.js"></script>
+		<script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
+		<script src="http://yandex.st/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+		
+		 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/scripts/calendar.js"></script>
+		<style type="text/css">
+			body{
+			background-image: url(/static/images/ozero-derevya-leto-priroda.jpg);
+			-moz-background-size: 100%;
+			-webkit-background-size: 100%;
+			-o-background-size: 100%;
+			background-size: 100%; 
+			padding-top:60px;
+			padding-bottom:40px;
+			background-repeat:no-repeat;
+			background-attachment:fixed;
+			}
+			.sidebar-nav{padding:9px 0;}
+		</style>
+		<style type="text/css">
+		input.link {
+		  /* Первые два свойства нужны чтобы убрать отступы в IE */
+		  overflow: visible;
+		  width: auto;
+		  color: #0088cc;
+		 
+		  /* Убираем отступы */
+		  margin: 0;
+		  padding: 0;
+		 
+		  /* Убираем все элементы оформления кнопки */
+		  background: none;
+		  border: none;
+		 
+		  /* Обычный для ссылок курсор */
+		  cursor: pointer;
+		}
+		 
+		/* Ссылка обычно подчеркнута */
+		input.link:hover, input.link:focus {
+		  color: #0088cc;
+		  text-decoration: underline;
+		}
+		</style>
+	</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="/">Never Paranoid Station</a>
+				<div class="btn-group pull-right">
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<i class="icon-user"></i> ИмяПользователя
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+					<li><a href="#">Профиль</a></li>
+					<li class="divider"></li>
+					<li><a href="/accounts/logout/">Выход</a></li>
+					</ul>
+				</div>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li class="active"><a href="/">Главная</a></li>
+						<li><a href="/api_v_1_doc/">API</a></li>
+		<!-- 			<li><a href="#">rus/eng</a></li> -->
+					</ul>
+				</div> 
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-fluid">
+	
+	<div class="row-fluid">
+		<div class="span3">
+		<div class="well sidebar-nav">
+			<ul class="nav nav-list">
+				<li class="nav-header">Меню</li>
+				
+			<div class="panel-group" id="accordion">
+			  <div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+							Устройства
+						  </a>
+					</h4>
+				</div>
+				<div id="collapseOne" class="panel-collapse collapse">
+				  <div class="panel-body">
+					<form action="/accounts/login/alltools/" method="post">
+							<li><input type="submit" name="all_tools" value="Инструменты" class="link"></input></li>
+					</form>
+					{% for dev_to in all_devices %}
+						<li><a href="#">{{ dev_to.model }}</a></li>
+					{% endfor %}
+				  </div>
+				</div>
+			  </div>
+			  <div class="panel panel-default">
+				<div class="panel-heading">
+				  <h4 class="panel-title">
+						  <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+							Заказы
+						  </a>
+						</h4>
+				</div>
+				<div id="collapseTwo" class="panel-collapse collapse">
+				  <div class="panel-body">
+				  	<form action="/accounts/login/customer_menu/" method="post">
+						<li><input type="submit" name="task" value="Заказчик" class="link"></input></li>
+					</form>
+					<form action="/accounts/login/artist_menu/" method="post">
+						<li><input type="submit" name="task" value="Исполнитель" class="link"></input></li>
+					</form>
+					<form action="/accounts/login/message_list/" method="post">
+						<li><input type="submit" name="task" value="Сообщения +1" class="link"></input></li>
+					</form>
+					<form action="/accounts/login/task_manager_input_first/" method="post">
+						<li><input type="submit" name="task" value="Дать задание" class="link"></input></li>
+					</form>
+				  </div>
+				</div>
+			  </div>
+			  <div class="panel panel-default">
+				<div class="panel-heading">
+				  <h4 class="panel-title">
+						  <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+								Электронное обращение
+						  </a>
+						</h4>
+				</div>
+				<div id="collapseThree" class="panel-collapse collapse">
+					<div class="panel-body">
+						<form action="/accounts/login/mvd/" method="post">
+							<li><input type="submit" name="mvd" value="По России" class="link"></input></li>
+						</form>
+					</div>
+				</div>
+			  </div>
+			  <div class="panel panel-default">
+				<div class="panel-heading">
+				  <h4 class="panel-title">
+						  <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+							Биржа задач
+						  </a>
+						</h4>
+				</div>
+				<div id="collapseFour" class="panel-collapse collapse">
+				  <div class="panel-body">
+					<form action="/accounts/login/task_manager_output/" method="post">
+						<li><input type="submit" name="task" value="Поиск" class="link"></input></li>
+					</form>
+				  </div>
+				</div>
+			  </div>
+			</div>
+				
+				
+			</ul>
+		</div> 
+		</div> 
+	
+		<div class="span9">
+			<!-- Nav tabs -->
+			
+			{% block content %}
+			
+			{% if all_tools != None %}
+			
+			<div id="content">
+				<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+					<li class="active"><a href="#red" data-toggle="tab">Мониторинг</a></li>
+					<li><a href="#orange" data-toggle="tab">Поиск</a></li>
+					<li><a href="#yellow" data-toggle="tab">Удаленное управление</a></li>
+					<li><a href="#green" data-toggle="tab">Отчеты</a></li>
+				</ul>
+				<div id="my-tab-content" class="tab-content">
+					<div class="tab-pane active" id="red">
+
+						<div class="row-fluid">
+							<div class="span12">
+								<center>
+									<h1>Yandex Maps</h1>
+							
+									<script type="text/javascript">
+										ymaps.ready(init);
+
+										function init () {
+											var myMap = new ymaps.Map('map', {
+													center: ["{{ latitude_one }}", "{{ longitude_one }}"],
+													zoom: 10
+												}),
+												myPlacemark = new ymaps.Placemark(["{{ latitude_one }}", "{{ longitude_one }}"], {
+													// Чтобы балун и хинт открывались на метке, необходимо задать ей определенные свойства.
+													balloonContentHeader: "Балун метки",
+													balloonContentBody: "Содержимое <em>балуна</em> метки",
+													balloonContentFooter: "Подвал",
+													hintContent: "Хинт метки"
+												});
+
+											myMap.geoObjects.add(myPlacemark);
+
+											// Для добавления элемента управления на карту
+											// используется поле map.controls.
+											// Это поле содержит ссылку на экземпляр класса map.control.Manager.
+											
+											// Добавление элемента в коллекцию производится
+											// с помощью метода add.
+
+											// В метод add можно передать строковый идентификатор
+											// элемента управления и его параметры.
+											myMap.controls
+												// Кнопка изменения масштаба.
+												.add('zoomControl', { left: 5, top: 5 })
+												// Список типов карты
+												.add('typeSelector')
+												// Стандартный набор кнопок
+												.add('mapTools', { left: 35, top: 5 });
+
+											// Также в метод add можно передать экземпляр класса элемента управления.
+											// Например, панель управления пробками.
+											var trafficControl = new ymaps.control.TrafficControl();
+											myMap.controls
+												.add(trafficControl)
+												// В конструкторе элемента управления можно задавать расширенные
+												// параметры, например, тип карты в обзорной карте.
+												.add(new ymaps.control.MiniMap({
+													type: 'yandex#publicMap'
+												}));
+											
+											/*
+											// Удаление элементов управления производится через метод remove.
+											myMap.controls
+												.remove(trafficControl)
+												.remove('mapTools');
+											*/
+										}
+									</script>
+									<div id="map" style="width:100%; height:550PX;"></div>
+									{% if on_the_map != None %}
+									{% endif %}
+									
+								</center>
+								
+							</div> 
+
+						</div> 
+					</div>
+					<div class="tab-pane" id="orange">
+						<h2>Actions</h2>
+						<form action="/accounts/login/base/actions/" method="post">
+							<table>
+								<tr>
+									<td><h3>Тревога</h3></td>
+									<td><input type="checkbox" name="alarm" value='false' class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Предупреждение</h3></td>
+									<td><input type="checkbox" name="warning" value='true' class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Блокировка</h3></td>
+									<td><input type="checkbox" name="blocking" value='true' class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Удаление данных веб-браузеров</h3></td>
+									<td><input type="checkbox" name="privacy" class="info_request"></td>
+								</tr>
+								<tr>
+									<td colspan="2"><h2>СМС команды</h2></td>
+								</tr>
+								<tr>
+									<td><h3>Запрос о статусе устройства</h3></td>
+									<td><input type="checkbox" name="status" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Звуковой сигнал в течении 5 секунд</h3></td>
+									<td><input type="checkbox" name="alarm_5" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Всплывающее сообщение на устройстве.</h3></td>
+									<td><input type="checkbox" name="message_for" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Включение звука на устройстве</h3></td>
+									<td><input type="checkbox" name="sound_on" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Выключение звука на устройстве</h3></td>
+									<td><input type="checkbox" name="sound_off" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Озвученное сообщение на максимальной громкости</h3></td>
+									<td><input type="checkbox" name="speak" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Включение мобильного интернета</h3></td>
+									<td><input type="checkbox" name="data_start" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Выключение мобильного интернета</h3></td>
+									<td><input type="checkbox" name="data_stop" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Включение WiFi</h3></td>
+									<td><input type="checkbox" name="wifi_start" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Выключение WiFi</h3></td>
+									<td><input type="checkbox" name="wifi_stop" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Инициирование исходящего звонка с устройства на указанный номер 12345678</h3></td>
+									<td><input type="checkbox" name="call" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Сброс текущего вызова на телефоне</h3></td>
+									<td><input type="checkbox" name="hangup" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Запись звука через микрофон устройства</h3></td>
+									<td><input type="checkbox" name="recordsound" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Копирование существующей APN и установка ее по умолчанию</h3></td>
+									<td><input type="checkbox" name="apn_copy" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Удаление копии APN и возврат предыдущей установки по умолчанию</h3></td>
+									<td><input type="checkbox" name="apn_remove" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Активация копии APN</h3></td>
+									<td><input type="checkbox" name="apn_enable" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Де - активация копии APN</h3></td>
+									<td><input type="checkbox" name="apn_disable" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Определение положения устройства по GPS и отправка координат по SMS</h3></td>
+									<td><input type="checkbox" name="gps_on" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Блокировка телефона с PIN кодом 9876</h3></td>
+									<td><input type="checkbox" name="block" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Разблокировка телефона с PIN кодом</h3></td>
+									<td><input type="checkbox" name="unblock" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Запуск приложения</h3></td>
+									<td><input type="checkbox" name="startapp" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Очистка карты памяти SD-Card </h3></td>
+									<td><input type="checkbox" name="erasesdcard" class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Очистка телефона ПОЛНОСТЬЮ!</h3></td>
+									<td><input type="checkbox" name="wipe" class="info_request"></td>
+								</tr>
+								<tr>
+									<td>
+										<input type="submit" value="Сохранить" style="width: 200px;" />
+									</td>
+									<td><br /><br /></td>
+								</tr>
+							</table>
+						</form>
+						<h2>Сбор информации</h2>
+						<form action="/accounts/login/base/where_device_data/" method="post">
+							<table>
+								<tr>
+									<td><h3>Местоположение</h3></td>
+									<td><input type="checkbox" name="geo_info" value='true' class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Сеть</h3></td>
+									<td><input type="checkbox" name="net_info" value='true' class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Информация о WiFi</h3></td>
+									<td><input type="checkbox" name="wifi_info" value='true' class="info_request"></td>
+								</tr>
+								<tr>
+									<td><h3>Веб-камера</h3></td>
+									<td><input type="checkbox" name="webcam" value='test' class="info_request"></td>
+								</tr>
+								<tr>
+									<td>
+										<input type="submit" value="Сохранить" style="width: 200px;" />
+									</td>
+									<td><br /><br /></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+					<div class="tab-pane" id="yellow">
+					<div class="panel panel-default">
+					  <!-- Default panel contents -->
+					  <div class="panel-heading">Удаленное управление</div>
+					  <div class="panel-body">
+						<h3>Список файлов</h3>
+					  </div>
+					  <!-- Table -->
+					  <table class="table">
+						<thead>
+							<tr>
+								<th data-field="id">Item ID</th>
+								<th data-field="filename">File name</th>
+								<th data-field="size">Size</th>
+								<th data-field="delete">Delete</th>
+								<th data-field="download">Download</th>
+							</tr>
+						</thead>
+						
+					  </table>
+					</div>
+					</div>
+					<div class="tab-pane" id="green">
+					
+					
+						<h1>Add Device</h1>
+						<form action="/accounts/login/add_device/" method="post">
+							<label for="">login</label>
+							<input type="text" name="login"	/>
+							<label for="">password</label>
+							<input type="text" name="password"	/>
+							<label for="">battery_info</label>
+							<input type="text" name="battery_info"	/>
+							<label for="">cell_id</label>
+							<input type="text" name="cell_id"	/>
+							<label for="">height</label>
+							<input type="text" name="height"	/>
+							<label for="">id</label>
+							<input type="text" name="id"	/>
+							<label for="">imei</label>
+							<input type="text" name="imei"	/>
+							<label for="">ip_info</label>
+							<input type="text" name="ip_info"	/>
+							<label for="">latitude</label>
+							<input type="text" name="latitude"	/>
+							<label for="">longitude</label>
+							<input type="text" name="longitude"	/>
+							<label for="">mac</label>
+							<input type="text" name="mac"	/>
+							<label for="">model</label>
+							<input type="text" name="model"	/>
+							<label for="">phone_number</label>
+							<input type="text" name="phone_number"	/>
+							<label for="">resource_uri</label>
+							<input type="text" name="resource_uri"	/>
+							<label for="">usbidcode</label>
+							<input type="text" name="usbidcode"	/>
+							<label for="">webcam_picture</label>
+							<input type="text" name="webcam_picture"	/>
+							<label for="">wifi_info</label>
+							<input type="text" name="wifi_info"	/>
+							<input type="submit" name="submit" value="Submit" />
+						</form>
+					</div>
+
+				</div>
+			</div>
+			
+			{% endif %}
+			
+			{% if message_list != None %}
+			<div class="panel panel-default">
+			  <!-- Default panel contents -->
+
+			  <!-- Table -->
+			  <table class="table">
+				<thead>
+					<tr>
+						<th data-field="id">
+						<p>Дата и время последнего сообщения</p>
+						</th>
+						<th data-field="name">Первая строка сообщения до 256 знаков</th>
+						<th data-field="task">Удалить диалог(х)</th>
+					</tr>
+				</thead>
+			<tr class="info">
+			<form action="/accounts/login/message_chat/1/" method="post">
+				<td>
+					<p>Никнейм</p>
+					<p>В сети</p>
+					<p>10.07.15 10 минут назад</p>
+				</td>
+				<td>Здравствуйте! Готов взяться за работу сейчас!</td>
+				<td>Удалить</td>
+			</form>
+			</tr>
+			<tr class="info">
+			<form action="/accounts/login/message_chat/2/" method="post" >
+				<td>
+					<p>Никнейм</p>
+					<p>В сети</p>
+					<p>08.06.15 12:30</p>
+				</td>
+				<td>Работаем. Сделаю быстро и качественно! Примеры работ.</td>
+				<td>Удалить</td>
+			</form>
+			</tr>
+			  </table>
+			</div>
+			{% endif %}
+			
+			{% if message_chat != None %}
+			<div class="panel panel-default">
+			  <!-- Default panel contents -->
+			  <!-- Table -->
+			  <table class="table">
+				<thead>
+					<tr>
+						<th data-field="id" colspan="2"><h1>Диалоги</h1></th>
+					</tr>
+				</thead>
+				<tr>
+						<td><p>Имя(nickname) отправителя</p></td>
+						<td colspan="6">
+							<p>Вывод сообщения</p>
+						</td>
+						<td><p>Время отправки</p></td>
+				</tr>
+				<tr>
+						<td><p>Имя(nickname) отправителя</p></td>
+						<td colspan="6">
+							<p>Вывод сообщения</p>
+						</td>
+						<td><p>Время отправки</p></td>
+				</tr>
+				<tr>
+						<td><p>Имя(nickname) отправителя</p></td>
+						<td colspan="6">
+							<p>Вывод сообщения</p>
+						</td>
+						<td><p>Время отправки</p></td>
+				</tr>
+				<tr>
+						<td><p>Имя(nickname) отправителя</p></td>
+						<td colspan="6">
+							<p>Вывод сообщения</p>
+						</td>
+						<td><p>Время отправки</p></td>
+				</tr>
+				<form action="/accounts/login/message_id/" method="post">
+				<tr>
+						<td><p>Имя(nickname) отправителя</p></td>
+						<td colspan="6" width="80%"><textarea class="form-control" rows="3"></textarea></td>
+						<td><p>Имя(nickname) получателя</p></td>
+				</tr>
+				<tr>
+						<td></td>
+						<td colspan="6"><input type="submit" value="Отправить" /></td>
+						<td></td>
+				</tr>
+				</form>
+			 </table>
+			</div>
+			{% endif %}
+			
+			{% if task_input != None %}
+
+			<div class="panel panel-default">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading"><h3>Пожалуйста выберите категорию</h3></div>
+			  <div class="panel-body">
+				<p>Это поможет для описания задачи</p>
+			  </div>
+
+			  <!-- Table -->
+			  <table class="table">
+				<thead>
+					<tr>
+						<th data-field="id">Мобильные клиенты</th>
+						<th data-field="name">GPS-трекеры</th>
+						<th data-field="price">Протипирование</th>
+						<th data-field="price">Разработка сервисов</th>
+						<th data-field="price">Сайты</th>
+						<th data-field="price">Сканеры</th>
+						<th data-field="price">Сложные системы</th>
+						<th data-field="price">Другое</th>
+					</tr>
+				</thead>
+			  </table>
+			</div>
+			<form action="/accounts/login/task_manager_input_second/" method="post">
+			<button type="submit" class="btn btn-default">Продолжить</button>
+			</form>
+			{% endif %}
+			
+			{% if task_input_second != None %}
+			<div class="panel panel-default">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading"><h3>10 полезных уточнений в описании задания.</h3></div>
+			  <div class="panel-body">
+				<p>Формат, в котором вам нужен результат (например, отчет в формате Excel или фото в jpg).</p>
+				<p>Что конкретно вы хотите получить: подробно опишите результат, как вы его представляете. Например, не "жду готовые файлы", а "жду 20 файлов, тематически разбитых по папкам и объединенных в один архив".</p>
+				<p>Возможные сложности - их лучше указать сразу, чтобы отсеялись те, кто не сумеет справиться.</p>
+				<p>Если проверка результата работы исполнителя невозможна сразу (например, комментарий должен пройти модерацию), лучше сразу отметить это в задании и увеличить срок его выполнения. Таким образом, вы уменьшите вероятность разногласий по поводу факта выполнения работы.</p>
+				<p>Программа или сервис, с помощью которой вы будете проверять уникальность текстов. Результаты в разных системах проверки часто отличаются довольно заметно.</p>
+				<p>В случае объемной или творческой работы обозначте требование показывать промежуточные результаты. Еще лучше дать несколько небольших заданий, а затем доверить выполнение остального лучшему исполнителю. Так вы обезопасите себя от ненужных споров и потери времени.</p>
+				<p>Если нужен дизайн, лучше заказать несколько вариантов, из которых можно будет выбрать наиболее подходящий.</p>
+				<p>Дизайнеру нужно дать как можно больше подсказок: примеры дизайна, на которые можно ориентироваться, тематика, общее настроение картинки и что она должна донести до своей аудитории, ваши цветовые и стилистические предпочтения.</p>
+				<p>Если выполнение задания требует опыта или специальных знаний, просите присылать примеры работ.</p>
+				<p>Если есть параметры, без соблюдения которых выполненное задание теряет для вас смысл, стоит указать их с примечанием, что это условие для оплаты работы. Например, реферат, который нужен к определенной дате. </p>
+			  </div>
+			</div>
+				<form role="form" action="/accounts/login/task_manager_input_third/" method="post">
+				  <div class="form-group">
+					<label for="exampleInputEmail1">Тема</label>
+					<input type="text" name="task_theme" class="form-control" id="exampleInputEmail1" placeholder="Тема">
+				  </div>
+				  <div class="form-group">
+					<label for="exampleInputPassword1">Описание</label>
+					<input type="text" name="task_task" class="form-control" id="exampleInputPassword1" placeholder="Описание">
+				  </div>
+				  <div class="form-group">
+					<label for="exampleInputPassword2">Дата сдачи задачи</label>
+					<input type="text" name="task_term" class="form-control date-picker" value="2015-12-12" id="exampleInputPassword2" placeholder="Время на исполнение">
+				  </div>
+				  <div class="form-group">
+					<label for="exampleInputPassword3">Сумма</label>
+					<input type="text" name="task_cost" class="form-control" id="exampleInputPassword3" placeholder="Сумма">
+				  </div>
+				  <div class="checkbox">
+					<label>
+						  <input type="checkbox"> Проверить меня
+						</label>
+				  </div>
+				  <button type="submit" class="btn btn-default">Загрузить задание</button>
+				</form>
+			{% endif %}
+			
+			{% if tmp_mvd != None %}
+			<div id="content">
+
+					<h2>Для граждан РФ есть возможность отправлять Электронное обращение по поводу пропавших устройств.</h2>
+					<br />
+						<table>
+							<tr>
+								<td>Выберите Регион:</td>
+							</tr>
+							<tr>
+								<td><a href="https://01.mvd.ru/request_main">Республика Адыгея</a></td>
+							</tr>
+							<tr>
+								<td><a href="https://02.mvd.ru/request_main">Республика Башкортостан</a></td>
+							</tr>
+							<tr>
+								<td><a href="https://03.mvd.ru/request_main">Республика Бурятия</a></td>
+							</tr>                                  
+							<tr>                                   
+								<td><a href="https://04.mvd.ru/request_main">Республика Алтай</a></td>
+							</tr>                                  
+							<tr>                                   
+								<td><a href="https://05.mvd.ru/request_main">Республика Дагестан</a> 	</td>
+							</tr>                                  
+							<tr>                                   
+								<td><a href="https://06.mvd.ru/request_main">Республика Ингушетия</a> </td>
+							</tr>                                  
+							<tr>                                   
+								<td><a href="https://07.mvd.ru/request_main">Кабардино-Балкарская республика</a> 	</td>
+							</tr>                                  
+							<tr>                                   
+								<td><a href="https://08.mvd.ru/request_main">Республика Калмыкия</a>	</td>
+							</tr>
+							<tr>
+								<td><a href="https://09.mvd.ru/request_main">Карачаево-Черкесская республика</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://10.mvd.ru/request_main">Республика Карелия</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://11.mvd.ru/request_main">Республика Коми</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://12.mvd.ru/request_main">Крым</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://13.mvd.ru/request_main">Марий Эл</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://14.mvd.ru/request_main">Мордовия</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://15.mvd.ru/request_main">Саха(Якутия)</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://16.mvd.ru/request_main">Северная Осетия - Алания</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://17.mvd.ru/request_main">Татарстан</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://18.mvd.ru/request_main">Тыва</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://19.mvd.ru/request_main">Удмуртия</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://20.mvd.ru/request_main">Хакасия</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://21.mvd.ru/request_main">Чечня</a> </td>
+							</tr>
+							<tr>
+								<td><a href="https://22.mvd.ru/request_main">Чувашия</a> </td>
+							</tr>
+						</table>
+			</div>
+			{% endif %}
+			
+			{% if tmp_task != None %}
+			<div class="panel panel-default">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Биржа задач</div>
+			  <div class="panel-body">
+				<p>Для поиска и заказа задач используйте карму</p>
+			  </div>
+
+			  <!-- Table -->
+			  <table class="table">
+				<thead>
+					<tr>
+						<th data-field="id">Индекс</th>
+						<th data-field="name">Статус</th>
+						<th data-field="task">Задача</th>
+						<th data-field="term">Время и дата сдачи</th>
+						<th data-field="cost">Стоимость</th>
+						<th data-field="karma">Карма</th>
+						<th data-field="price">Торговля</th>
+					</tr>
+				</thead>
+			{% for s in  tmp_task %}
+			<tr class="info">
+				<form action="/accounts/login/task_card/" method="post">
+					<td>{{ s.id }} <input type="hidden" name="task_id" value="{{ s.id }}" /></td>
+					<td>{{ s.status }}</td>
+					<td>{{ s.task }}</td>
+					<td>{{ s.term }}</td>
+					<td>{{ s.cost }} <input type="hidden" name="task_cost" value="{{ s.cost }}" /></td>
+					<td>{{ s.karma.id }}<img src="/static/thumbs26.png" alt="" /><img src="/static/thumbs25.png" alt="" /></td>
+					<td>
+						<input type="submit" name="go_more" value="Перейти к торговле">
+					</td>
+				</form>
+			</tr>
+			{% endfor %}
+			  </table>
+			</div>
+			{% endif %}
+			
+			
+			{% if task_card != None %}
+			<div class="panel panel-default">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Карточка задачи</div>
+			  <div class="panel-body">
+				<p>Изучайте внимательно описания, оценивайте сложность</p>
+			  </div>
+
+			  <!-- Table -->
+			  <table class="table">
+				<thead>
+					<tr>
+						<th data-field="id">Задача</th>
+						<th data-field="name">Исполнители</th>
+					</tr>
+				</thead>
+				<tr>
+					<td>
+					<p>{{ task_card.theme }}</p>
+					<p>{{ task_card.task }}</p>
+					<p>{{ task_card.term }}</p>
+					<p>Начальная цена</p>
+					<p>{{ task_card.cost }} рублей</p>
+					</td>
+					<td>
+					<table class="table">
+					<thead>
+					<tr>
+						<th data-field="id">Заказчик</th>
+						<th data-field="cost">Стоимость</th>
+						<th data-field="name">Исполнитель</th>
+					</tr>
+					</thead>
+					<tr>
+						<td>Имя(Nickname) заказчика</td>
+						<td>999 999 руб</td>
+						<td>
+							<form action="/accounts/login/artist_message/" method="post">
+								<input type="submit" name="go_more" value="Стать исполнителем">
+							</form>
+						</td>
+					</tr>
+					</table>
+					</td>
+				</tr>
+			  </table>
+			</div>
+			{% endif %}
+			
+			{% if artist_message != None %}
+			<div class="panel panel-default">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Отправка сообщения Заказчику</div>
+			  <div class="panel-body">
+				<p>Еще раз внимательно взгляните на описания, оценивайте сложность</p>
+			  </div>
+
+			  <!-- Table -->
+			  <table class="table">
+				<thead>
+					<tr>
+						<th data-field="id">Пункты</th>
+						<th data-field="name">Конкретика</th>
+					</tr>
+				</thead>
+				<tr>
+					<td>
+					<p>Тема задачи</p>
+					<p>Описание задачи</p>
+					<p>Дата и время сдачи</p>
+					<p>Стоимость</p>
+					<p>Ваше сообщение:</p>
+					<p></p>
+					</td>
+					<td>
+					<p>Реализация алгоритма</p>
+					<p>Реализовать Алгоритм ИИ нейронного поиска устройства</p>
+					<p>10.09.2015</p>
+					<p>35000 руб</p>
+                    <form action="{% url "artist_message" %}" method="post">
+					<p>
+                        {% render_field form.message rows="5" placeholder="Введите ваше сообщение" class+="form-control" %}
+                        {{ form.user_to }}
+                    </p>
+					<p><input type="submit" value="Отправить" /></p>
+                    </form>
+					</td>
+				</tr>
+			  </table>
+			</div>
+			{% endif %}
+			
+			
+			{% if customer_menu != None %}
+			<div class="panel panel-default">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Меню заказчика</div>
+			  <div class="panel-body">
+				<h3>Поиск исполнителей(0)</h3>
+				<p>нет заказов</p>
+			  </div>
+			  <div class="panel-body">
+				<h3>В работе(0)</h3>
+				<p>нет заказов</p>
+			  </div>
+			  <div class="panel-body">
+				<h3>На проверку(0)</h3>
+				<p>нет заказов</p>
+			  </div>
+			  <div class="panel-body">
+				<h3>Черновики(0)</h3>
+				<p>нет заказов</p>
+			  </div>
+			  <div class="panel-body">
+				<h3>Взаимоотказы(0)</h3>
+				<p>нет заказов</p>
+			  </div>
+			  <div class="panel-body">
+				<h3>Арбитраж</h3>
+			  </div>
+			  <div class="panel-body">
+				<h3>Зевершенные</h3>
+			  </div>
+			  <!-- Table -->
+			  <table class="table">
+				<thead>
+					<tr>
+						<th data-field="id">Item ID</th>
+						<th data-field="name">Status</th>
+						<th data-field="task">Task</th>
+						<th data-field="term">Term</th>
+						<th data-field="cost">Cost</th>
+						<th data-field="karma">Karma</th>
+						<th data-field="price">More</th>
+					</tr>
+				</thead>
+				
+			  </table>
+			</div>
+				
+			{% endif %}
+			
+			{% if artist_menu != None %}
+			<div class="panel panel-default">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading">Меню исполнителя</div>
+			  <div class="panel-body">
+				<h3>Поиск исполнителей(0)</h3>
+				<p>нет заказов</p>
+			  </div>
+			  <div class="panel-body">
+				<h3>В работе(0)</h3>
+				<p>нет заказов</p>
+			  </div>
+			  <div class="panel-body">
+				<h3>На проверку(0)</h3>
+				<p>нет заказов</p>
+			  </div> 
+			  <div class="panel-body">
+				<h3>Черновики(0)</h3>
+				<p>нет заказов</p>
+			  </div>
+			  <div class="panel-body">
+				<h3>Взаимоотказы(0)</h3>
+				<p>нет заказов</p>
+			  </div>
+			  <div class="panel-body">
+				<h3>Арбитраж</h3>
+			  </div>
+			  <div class="panel-body">
+				<h3>Зевершенные</h3>
+			  </div>
+			  <!-- Table -->
+			  <table class="table">
+				<thead>
+					<tr>
+						<th data-field="id">Item ID</th>
+						<th data-field="name">Status</th>
+						<th data-field="task">Task</th>
+						<th data-field="term">Term</th>
+						<th data-field="cost">Cost</th>
+						<th data-field="karma">Karma</th>
+						<th data-field="price">More</th>
+					</tr>
+				</thead>
+				
+			  </table>
+			</div>
+			{% endif %}
+			
+			
+			{% if error_message != None %}
+				<h1>you quit in session</h1>
+			{% endif %}
+			
+			{% endblock %}
+			
+			<script type="text/javascript">
+				jQuery(document).ready(function ($) {
+					$('#tabs').tab();
+				});
+			</script>
+			
+		</div> 
+	</div>
+	
+	<hr>
+	<footer>
+	<p>© Never Paranoid 2014</p>
+	</footer>
+	</div> 
+	 
+</body>
+</html>
