@@ -104,6 +104,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'cuser.middleware.CuserMiddleware',
 )
 
 ROOT_URLCONF = 'np_station.urls'
@@ -128,6 +129,7 @@ INSTALLED_APPS = (
 	'django.contrib.sites',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
+    'django.contrib.humanize',
 	'np_server',
 	'sslserver',
 	'tagging',
@@ -145,6 +147,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'widget_tweaks',
+    'cuser',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

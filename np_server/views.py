@@ -19,6 +19,8 @@ from bs4 import BeautifulSoup
 from urllib2 import urlopen
 from lxml.html import parse
 from .forms import ChatMessageForm
+from django.shortcuts import get_object_or_404, redirect
+from django.core.urlresolvers import reverse
 
 #-------------------------------------------------------------------------------------------------
 
@@ -453,20 +455,32 @@ def artist_menu(request):
 #-------------------------Карточка-задачи-------------------------------
 		
 def task_card(request):
-	if (if_user_session(request.session['you_session'])):
+	if if_user_session(request.session['you_session']):
 		if 'task_id' in request.POST:
-			task_card = Task.objects.get(id=request.POST['task_id'])
-			return render_to_response("usermodule.html", {'task_card': task_card})
-	else:
-		return render_to_response("usermodule.html")
+			try:
+				return render_to_response("usermodule.html", {
+					'task_card': Task.objects.get(id=request.POST['task_id'])
+				})
+			except Task.DoesNotExist:
+				pass
+	return render_to_response("usermodule.html")
 
 #artist_message
 def artist_message(request):
 	if if_user_session(request.session['you_session']):
 		artist_message = 'Сохранение в сообщения в базу данных'
-		form = ChatMessageForm()
+		form = ChatMessageForm(request.POST if 'send_artist_message' in request.POST else None)
+		try:
+			task = Task.objects.get(id=request.POST.get('task_id'))
+			form.instance.user_to = form.initial['user_to'] = task.user
+		except Task.DoesNotExist:
+			return render_to_response("usermodule.html")
+		if form.is_valid():
+			form.save()
+			return redirect(reverse('message_chat', args=[task.user.id]))
 		return render_to_response("usermodule.html", {
 			'artist_message': artist_message,
+			'task': task,
 			'form': form
 		})
 	else:
@@ -482,7 +496,7 @@ def message_list(request):
 
 #------------------------Сообщения-Чат----------------------------------
 
-def message_chat(request):
+def message_chat(request, user_id=0):
 	if (if_user_session(request.session['you_session'])):
 		message_chat = 'Сохранение в задачи в базу данных'
 		return render_to_response("usermodule.html", {'message_chat': message_chat})

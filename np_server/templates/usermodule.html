@@ -1,4 +1,4 @@
-{% load widget_tweaks %}
+{% load widget_tweaks humanize %}
 <!DOCTYPE HTML>
 <html lang="en-US">
 	<head>
@@ -799,7 +799,7 @@
 					<p>{{ task_card.task }}</p>
 					<p>{{ task_card.term }}</p>
 					<p>Начальная цена</p>
-					<p>{{ task_card.cost }} рублей</p>
+					<p>{{ task_card.cost|intcomma }} рублей</p>
 					</td>
 					<td>
 					<table class="table">
@@ -811,10 +811,11 @@
 					</tr>
 					</thead>
 					<tr>
-						<td>Имя(Nickname) заказчика</td>
-						<td>999 999 руб</td>
+						<td>{{ task_card.user }}</td>
+						<td>{{ task_card.cost|intcomma }} руб</td>
 						<td>
 							<form action="/accounts/login/artist_message/" method="post">
+                                <input type="hidden" name="task_id" value="{{ task_card.id }}">
 								<input type="submit" name="go_more" value="Стать исполнителем">
 							</form>
 						</td>
@@ -852,16 +853,18 @@
 					<p></p>
 					</td>
 					<td>
-					<p>Реализация алгоритма</p>
-					<p>Реализовать Алгоритм ИИ нейронного поиска устройства</p>
+					<p>{{ task.theme }}</p>
+					<p>{{ task.task }}</p>
 					<p>10.09.2015</p>
-					<p>35000 руб</p>
+					<p>{{ task.cost|intcomma }} руб</p>
                     <form action="{% url "artist_message" %}" method="post">
 					<p>
+                        {{ form.errors }}
                         {% render_field form.message rows="5" placeholder="Введите ваше сообщение" class+="form-control" %}
                         {{ form.user_to }}
+                        <input type="hidden" name="task_id" value="{{ task.id }}">
                     </p>
-					<p><input type="submit" value="Отправить" /></p>
+					<p><input type="submit" value="Отправить" name="send_artist_message" /></p>
                     </form>
 					</td>
 				</tr>
