@@ -21,6 +21,7 @@ from lxml.html import parse
 from .forms import ChatMessageForm
 from django.shortcuts import get_object_or_404, redirect
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 
 #-------------------------------------------------------------------------------------------------
 
@@ -498,10 +499,21 @@ def message_list(request):
 
 def message_chat(request, user_id=0):
 	if (if_user_session(request.session['you_session'])):
-		message_chat = 'Сохранение в задачи в базу данных'
-		return render_to_response("usermodule.html", {'message_chat': message_chat})
-	else:
-		return render_to_response("usermodule.html")
+		me = request.user
+		try:
+			other_guy = User.objects.get(id=user_id)
+			message_chat = ChatMessage.objects.filter(
+				Q(user_from=me, user_to=other_guy) |
+				Q(user_from=other_guy, user_to=me)
+			)
+			return render_to_response("usermodule.html", {
+				'message_chat': message_chat,
+				'me': me,
+				'other_guy': other_guy
+			})
+		except User.DoesNotExist:
+			pass
+	return render_to_response("usermodule.html")
 
 #--------------------------------------------------------------------
 		

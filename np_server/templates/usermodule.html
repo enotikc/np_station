@@ -537,42 +537,25 @@
 			  <table class="table">
 				<thead>
 					<tr>
-						<th data-field="id" colspan="2"><h1>Диалоги</h1></th>
+						<th data-field="id" colspan="2"><h1>Диалог с {{ other_guy }}</h1></th>
 					</tr>
 				</thead>
+                  {% for message in message_chat %}
 				<tr>
-						<td><p>Имя(nickname) отправителя</p></td>
+						<td><p>{{ message.user_from }}</p></td>
 						<td colspan="6">
-							<p>Вывод сообщения</p>
+							<p>{{ message.message }}</p>
 						</td>
-						<td><p>Время отправки</p></td>
+						<td><p>{{ message.add_time|date:"j E Y H:i" }}</p></td>
 				</tr>
-				<tr>
-						<td><p>Имя(nickname) отправителя</p></td>
-						<td colspan="6">
-							<p>Вывод сообщения</p>
-						</td>
-						<td><p>Время отправки</p></td>
-				</tr>
-				<tr>
-						<td><p>Имя(nickname) отправителя</p></td>
-						<td colspan="6">
-							<p>Вывод сообщения</p>
-						</td>
-						<td><p>Время отправки</p></td>
-				</tr>
-				<tr>
-						<td><p>Имя(nickname) отправителя</p></td>
-						<td colspan="6">
-							<p>Вывод сообщения</p>
-						</td>
-						<td><p>Время отправки</p></td>
-				</tr>
+                  {% endfor %}
+
+
 				<form action="/accounts/login/message_id/" method="post">
 				<tr>
-						<td><p>Имя(nickname) отправителя</p></td>
+						<td><p>{{ me }}</p></td>
 						<td colspan="6" width="80%"><textarea class="form-control" rows="3"></textarea></td>
-						<td><p>Имя(nickname) получателя</p></td>
+						<td><p>{{ other_guy }}</p></td>
 				</tr>
 				<tr>
 						<td></td>
