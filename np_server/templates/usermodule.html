@@ -551,15 +551,20 @@
                   {% endfor %}
 
 
-				<form action="/accounts/login/message_id/" method="post">
+				<form action="{% url "message_chat" other_guy.id %}" method="post">
 				<tr>
 						<td><p>{{ me }}</p></td>
-						<td colspan="6" width="80%"><textarea class="form-control" rows="3"></textarea></td>
+						<td colspan="6" width="80%">
+{#                            <textarea class="form-control" rows="3"></textarea>#}
+                            {{ form.errors }}
+                            {% render_field form.message rows="3" placeholder="Введите ваше сообщение" class+="form-control" %}
+                            {{ form.user_to }}
+                        </td>
 						<td><p>{{ other_guy }}</p></td>
 				</tr>
 				<tr>
 						<td></td>
-						<td colspan="6"><input type="submit" value="Отправить" /></td>
+						<td colspan="6"><input type="submit" value="Отправить" name="send_artist_message" /></td>
 						<td></td>
 				</tr>
 				</form>

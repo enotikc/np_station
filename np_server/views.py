@@ -498,10 +498,16 @@ def message_list(request):
 #------------------------Сообщения-Чат----------------------------------
 
 def message_chat(request, user_id=0):
-	if (if_user_session(request.session['you_session'])):
+	if if_user_session(request.session['you_session']):
 		me = request.user
+		form = ChatMessageForm(request.POST if 'send_artist_message' in request.POST else None)
 		try:
 			other_guy = User.objects.get(id=user_id)
+			form.instance.user_to = form.initial['user_to'] = other_guy
+			if form.is_valid():
+				form.save()
+				return redirect(reverse('message_chat', args=[other_guy.id]))
+
 			message_chat = ChatMessage.objects.filter(
 				Q(user_from=me, user_to=other_guy) |
 				Q(user_from=other_guy, user_to=me)
@@ -509,7 +515,8 @@ def message_chat(request, user_id=0):
 			return render_to_response("usermodule.html", {
 				'message_chat': message_chat,
 				'me': me,
-				'other_guy': other_guy
+				'other_guy': other_guy,
+				'form': form
 			})
 		except User.DoesNotExist:
 			pass
