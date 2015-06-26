@@ -489,8 +489,16 @@ def artist_message(request):
 
 #message_list
 def message_list(request):
-	if (if_user_session(request.session['you_session'])):
-		message_list = 'Сохранение в сообщения в базу данных'
+	if if_user_session(request.session['you_session']):
+		me = request.user
+
+		def add_last_message(dialog):
+			dialog.last_message = ChatMessage.objects.filter(
+				Q(user_from=me, user_to=dialog.interlocutor) |
+				Q(user_from=dialog.interlocutor, user_to=me)
+			).last().message
+			return dialog
+		message_list = [add_last_message(dialog) for dialog in ChatDialog.objects.filter(user=me)]
 		return render_to_response("usermodule.html", {'message_list': message_list})
 	else:
 		return render_to_response("usermodule.html")	

@@ -307,3 +307,13 @@ class ChatMessage(models.Model):
 
 	class Meta:
 		ordering = ['add_time']
+
+	def save(self, *args, **kwargs):
+		super(ChatMessage, self).save(*args, **kwargs)
+		dialog1, created = ChatDialog.objects.get_or_create(user=self.user_from, interlocutor=self.user_to)
+		dialog1.is_hidden = False
+		dialog1.save()
+
+		dialog2, created = ChatDialog.objects.get_or_create(user=self.user_to, interlocutor=self.user_from)
+		dialog2.is_hidden = False
+		dialog2.save()

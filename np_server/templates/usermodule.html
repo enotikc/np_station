@@ -504,28 +504,17 @@
 						<th data-field="task">Удалить диалог(х)</th>
 					</tr>
 				</thead>
+             {% for message in message_list %}
 			<tr class="info">
-			<form action="/accounts/login/message_chat/1/" method="post">
 				<td>
-					<p>Никнейм</p>
+					<p>{{ message.interlocutor }}</p>
 					<p>В сети</p>
-					<p>10.07.15 10 минут назад</p>
+					<p>{{ message.last_updated|date:"d.m.Y G:i" }}</p>
 				</td>
-				<td>Здравствуйте! Готов взяться за работу сейчас!</td>
+				<td><a href="{% url "message_chat" message.interlocutor.id %}">{{ message.last_message|truncatechars:256 }}</a></td>
 				<td>Удалить</td>
-			</form>
 			</tr>
-			<tr class="info">
-			<form action="/accounts/login/message_chat/2/" method="post" >
-				<td>
-					<p>Никнейм</p>
-					<p>В сети</p>
-					<p>08.06.15 12:30</p>
-				</td>
-				<td>Работаем. Сделаю быстро и качественно! Примеры работ.</td>
-				<td>Удалить</td>
-			</form>
-			</tr>
+            {% endfor %}
 			  </table>
 			</div>
 			{% endif %}
