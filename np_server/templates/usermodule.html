@@ -1,4 +1,4 @@
-{% load widget_tweaks humanize %}
+{% load widget_tweaks humanize chat_tags %}
 <!DOCTYPE HTML>
 <html lang="en-US">
 	<head>
@@ -135,7 +135,7 @@
 						<li><input type="submit" name="task" value="Исполнитель" class="link"></input></li>
 					</form>
 					<form action="/accounts/login/message_list/" method="post">
-						<li><input type="submit" name="task" value="Сообщения +1" class="link"></input></li>
+						<li><input type="submit" name="task" value="Сообщения {% unread_dialogs %}" class="link"></input></li>
 					</form>
 					<form action="/accounts/login/task_manager_input_first/" method="post">
 						<li><input type="submit" name="task" value="Дать задание" class="link"></input></li>

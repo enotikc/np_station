@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from zinnia.models import Entry
 from zinnia.admin.entry import EntryAdmin
+from django.utils import timezone
 
 # -------------------API---------------------------------------------------------
 class UserProfile(models.Model):
@@ -291,10 +292,20 @@ class DeviceList(models.Model):
 
 
 class ChatDialog(models.Model):
-	last_updated = models.DateTimeField(auto_now=True)
+	last_updated = models.DateTimeField(auto_now_add=True)
+	view_time = models.DateTimeField(blank=True, null=True)
 	is_hidden = models.BooleanField(default=False)
 	user = models.ForeignKey(User, related_name="+")
 	interlocutor = models.ForeignKey(User, related_name="+")
+
+	def mark_as_viewed(self):
+		self.view_time = timezone.now()
+		self.save()
+
+	def mark_is_updated(self):
+		self.last_updated = timezone.now()
+		self.is_hidden = False
+		self.save()
 
 	class Meta:
 		ordering = ['-last_updated']
@@ -311,9 +322,9 @@ class ChatMessage(models.Model):
 	def save(self, *args, **kwargs):
 		super(ChatMessage, self).save(*args, **kwargs)
 		dialog1, created = ChatDialog.objects.get_or_create(user=self.user_from, interlocutor=self.user_to)
-		dialog1.is_hidden = False
-		dialog1.save()
+		if not created:
+			dialog1.mark_is_updated()
 
 		dialog2, created = ChatDialog.objects.get_or_create(user=self.user_to, interlocutor=self.user_from)
-		dialog2.is_hidden = False
-		dialog2.save()
+		if not created:
+			dialog2.mark_is_updated()

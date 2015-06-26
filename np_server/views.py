@@ -423,7 +423,8 @@ def task_manager_input_second(request):
 		return render_to_response("usermodule.html", {'task_input_second': task_input_second})
 	else:
 		return render_to_response("usermodule.html")
-		
+
+
 def task_manager_input_third(request):
 	if (if_user_session(request.session['you_session'])):
 		userid = "1"
@@ -521,6 +522,10 @@ def message_chat(request, user_id=0):
 		form = ChatMessageForm(request.POST if 'send_artist_message' in request.POST else None)
 		try:
 			other_guy = User.objects.get(id=user_id)
+			try:
+				ChatDialog.objects.get(user=me, interlocutor=other_guy).mark_as_viewed()
+			except (ChatDialog.DoesNotExist, ChatDialog.MultipleObjectsReturned):
+				pass
 			form.instance.user_to = form.initial['user_to'] = other_guy
 			if form.is_valid():
 				form.save()
