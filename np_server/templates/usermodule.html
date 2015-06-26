@@ -556,8 +556,13 @@
 						<td><p>{{ me }}</p></td>
 						<td colspan="6" width="80%">
 {#                            <textarea class="form-control" rows="3"></textarea>#}
-                            {{ form.errors }}
-                            {% render_field form.message rows="3" placeholder="Введите ваше сообщение" class+="form-control" %}
+                            {% if form.message.errors %}
+                            <span class="has-error">
+                                {% render_field form.message rows="3" placeholder="Введите ваше сообщение" class+="form-control" %}
+                            </span>
+                            {% else %}
+                                {% render_field form.message rows="3" placeholder="Введите ваше сообщение" class+="form-control" %}
+                            {% endif %}
                             {{ form.user_to }}
                         </td>
 						<td><p>{{ other_guy }}</p></td>
@@ -847,8 +852,14 @@
 					<p>{{ task.cost|intcomma }} руб</p>
                     <form action="{% url "artist_message" %}" method="post">
 					<p>
-                        {{ form.errors }}
-                        {% render_field form.message rows="5" placeholder="Введите ваше сообщение" class+="form-control" %}
+                        {% if form.message.errors %}
+                            <span class="has-error">
+                             {% render_field form.message rows="5" placeholder="Введите ваше сообщение" class+="form-control" %}
+                            </span>
+                        {% else %}
+                             {% render_field form.message rows="5" placeholder="Введите ваше сообщение" class+="form-control" %}
+                        {% endif %}
+
                         {{ form.user_to }}
                         <input type="hidden" name="task_id" value="{{ task.id }}">
                     </p>
