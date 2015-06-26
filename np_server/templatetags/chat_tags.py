@@ -6,9 +6,9 @@ from cuser.middleware import CuserMiddleware
 register = template.Library()
 
 
-def get_unread_dialogs_count(user):
+def get_unread_dialogs_count(user_id):
 	return ChatDialog.objects.filter(
-		user=user,
+		user__id=user_id,
 		last_updated__gte=F('view_time'),
 		is_hidden=False
 	).count()
@@ -16,8 +16,9 @@ def get_unread_dialogs_count(user):
 
 @register.simple_tag
 def unread_dialogs():
-	d_count = get_unread_dialogs_count(CuserMiddleware.get_user())
-	if d_count > 0:
-		return "+{}".format(d_count)
-	else:
-		return ""
+	user = CuserMiddleware.get_user()
+	if user.is_authenticated():
+		d_count = get_unread_dialogs_count(user.id)
+		if d_count > 0:
+			return "+{}".format(d_count)
+	return ""
