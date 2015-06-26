@@ -512,7 +512,7 @@
 					<p>{{ message.last_updated|date:"d.m.Y G:i" }}</p>
 				</td>
 				<td><a href="{% url "message_chat" message.interlocutor.id %}">{{ message.last_message|truncatechars:256 }}</a></td>
-				<td>Удалить</td>
+				<td><a href="{% url "dialog_remove" message.interlocutor.id %}">Удалить</a></td>
 			</tr>
             {% endfor %}
 			  </table>

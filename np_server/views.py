@@ -498,10 +498,20 @@ def message_list(request):
 				Q(user_from=dialog.interlocutor, user_to=me)
 			).last().message
 			return dialog
-		message_list = [add_last_message(dialog) for dialog in ChatDialog.objects.filter(user=me)]
+		message_list = [add_last_message(dialog) for dialog in ChatDialog.objects.filter(user=me, is_hidden=False)]
 		return render_to_response("usermodule.html", {'message_list': message_list})
 	else:
-		return render_to_response("usermodule.html")	
+		return render_to_response("usermodule.html")
+
+def dialog_remove(request, user_id):
+	if if_user_session(request.session['you_session']):
+		me = request.user
+		dialog_for_remove = ChatDialog.objects.get(user=me, interlocutor__id=user_id)
+		dialog_for_remove.is_hidden = True
+		dialog_for_remove.save()
+		return redirect(reverse('message_list'))
+	else:
+		return render_to_response("usermodule.html")
 
 #------------------------Сообщения-Чат----------------------------------
 
