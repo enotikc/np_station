@@ -523,19 +523,19 @@
 			<div class="panel panel-default">
 			  <!-- Default panel contents -->
 			  <!-- Table -->
-			  <table class="table">
+			  <table class="table" id="chat_messages">
 				<thead>
 					<tr>
 						<th data-field="id" colspan="2"><h1>Диалог с {{ other_guy }}</h1></th>
 					</tr>
 				</thead>
                   {% for message in message_chat %}
-				<tr>
+				<tr class="chat_message">
 						<td><p>{{ message.user_from }}</p></td>
 						<td colspan="6">
 							<p>{{ message.message }}</p>
 						</td>
-						<td><p>{{ message.add_time|date:"j E Y H:i" }}</p></td>
+						<td><p>{{ message.add_time|date:"j.m.Y H:i" }}</p></td>
 				</tr>
                   {% endfor %}
 
@@ -544,7 +544,6 @@
 				<tr>
 						<td><p>{{ me }}</p></td>
 						<td colspan="6" width="80%">
-{#                            <textarea class="form-control" rows="3"></textarea>#}
                             {% if form.message.errors %}
                             <span class="has-error">
                                 {% render_field form.message rows="3" placeholder="Введите ваше сообщение" class+="form-control" %}
@@ -564,6 +563,45 @@
 				</form>
 			 </table>
 			</div>
+
+            <script type="javascript/template" id="chat_message_template">
+				<tr class="chat_message">
+						<td><p>#USER#</p></td>
+						<td colspan="6">
+							<p>#MESSAGE#</p>
+						</td>
+						<td><p>#TIME#</p></td>
+				</tr>
+            </script>
+
+            <script type="text/javascript">
+            var interval = 3000,
+                    last_id = {{ last_id }},
+                    chat_message_template = $("#chat_message_template").text();
+            function getUrl(last_id) {
+                return '/accounts/login/message_chat/{{ other_guy.id }}/check_new_messages/'+last_id+'/';
+            }
+            function checkNewMessages () {
+                $.ajax({
+                    url: getUrl(last_id),
+                    success: function(new_messages){
+                        if (new_messages.length > 0){
+                            last_id = new_messages[new_messages.length - 1].id;
+                            console.log(new_messages)}
+                            var new_messages_html = "";
+                            for(var i in new_messages) {
+                                var chat_message = new_messages[i];
+                                new_messages_html += chat_message_template
+                                        .replace('#USER#', chat_message.author)
+                                        .replace('#MESSAGE#', chat_message.message)
+                                        .replace('#TIME#', chat_message.time);
+                                $(new_messages_html).insertAfter($("#chat_messages").find(".chat_message").last());
+                            }
+                        }
+                });
+            }
+            setInterval(checkNewMessages, interval);
+            </script>
 			{% endif %}
 			
 			{% if task_input != None %}

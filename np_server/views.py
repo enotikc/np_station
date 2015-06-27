@@ -12,7 +12,7 @@ import datetime
 import StringIO
 import re
 from django.contrib import auth
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ObjectDoesNotExist
 from bs4 import BeautifulSoup
@@ -22,6 +22,8 @@ from .forms import ChatMessageForm
 from django.shortcuts import get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
+import json
+from datetime import datetime
 
 #-------------------------------------------------------------------------------------------------
 
@@ -516,6 +518,25 @@ def dialog_remove(request, user_id):
 
 #------------------------Сообщения-Чат----------------------------------
 
+def check_new_messages(request, user_id, last_id):
+	if if_user_session(request.session['you_session']):
+		me = request.user
+		other_guy = User.objects.get(id=user_id)
+		new_messages = [{
+			'id': message.id,
+			'author': message.user_from.username,
+			'message': message.message,
+			'time': message.add_time.strftime("%d.%m.%Y %H:%M")
+		} for message in ChatMessage.objects.filter(
+			Q(id__gt=last_id) & (
+				Q(user_from=me, user_to=other_guy) |
+				Q(user_from=other_guy, user_to=me)
+			)
+		)]
+		return HttpResponse(json.dumps(new_messages), content_type='application/json')
+	return render_to_response("usermodule.html")
+
+
 def message_chat(request, user_id=0):
 	if if_user_session(request.session['you_session']):
 		me = request.user
@@ -537,6 +558,7 @@ def message_chat(request, user_id=0):
 			)
 			return render_to_response("usermodule.html", {
 				'message_chat': message_chat,
+				'last_id': message_chat.last().id,
 				'me': me,
 				'other_guy': other_guy,
 				'form': form
