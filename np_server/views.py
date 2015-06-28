@@ -23,7 +23,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 import json
-from datetime import datetime
+from django.utils import timezone
 
 #-------------------------------------------------------------------------------------------------
 
@@ -526,7 +526,7 @@ def check_new_messages(request, user_id, last_id):
 			'id': message.id,
 			'author': message.user_from.username,
 			'message': message.message,
-			'time': message.add_time.strftime("%d.%m.%Y %H:%M")
+			'time': timezone.localtime(message.add_time).strftime("%d.%m.%Y %H:%M")
 		} for message in ChatMessage.objects.filter(
 			Q(id__gt=last_id) & (
 				Q(user_from=me, user_to=other_guy) |
