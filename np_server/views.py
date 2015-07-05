@@ -555,10 +555,11 @@ def message_chat(request, user_id=0):
 			message_chat = ChatMessage.objects.filter(
 				Q(user_from=me, user_to=other_guy) |
 				Q(user_from=other_guy, user_to=me)
-			)
+			).order_by('-add_time')[:20:-1]
+
 			return render_to_response("usermodule.html", {
 				'message_chat': message_chat,
-				'last_id': message_chat.last().id,
+				'last_id': message_chat[-1].id,
 				'me': me,
 				'other_guy': other_guy,
 				'form': form
