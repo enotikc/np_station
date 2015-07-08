@@ -523,13 +523,19 @@
 			<div class="panel panel-default">
 			  <!-- Default panel contents -->
 			  <!-- Table -->
-			  <table class="table" id="chat_messages">
+
+			  <table class="table cem0808-chat">
 				<thead>
-					<tr>
+					<tr class="cem0808-chat_title">
 						<th data-field="id" colspan="2"><h1>Диалог с {{ other_guy }}</h1></th>
 					</tr>
 				</thead>
-                  {% for message in message_chat %}
+                <tr class="cem0808-chat_messages">
+
+                    <td colspan="8" class="cem0808-chat_messages_wrap">
+                        <div class="cem0808-chat_messages_content" id="chat_scroll">
+                        <table class="table" id="chat_messages">
+{% for message in message_chat %}
 				<tr class="chat_message">
 						<td><p>{{ message.user_from }}</p></td>
 						<td colspan="6">
@@ -537,11 +543,13 @@
 						</td>
 						<td><p>{{ message.add_time|date:"j.m.Y H:i" }}</p></td>
 				</tr>
-                  {% endfor %}
-
-
+{% endfor %}
+                    </table>
+                        </div>
+                    </td>
+                </tr>
 				<form action="{% url "message_chat" other_guy.id %}" method="post">
-				<tr>
+				<tr class="cem0808-chat_form-field">
 						<td><p>{{ me }}</p></td>
 						<td colspan="6" width="80%">
                             {% if form.message.errors %}
@@ -555,13 +563,30 @@
                         </td>
 						<td><p>{{ other_guy }}</p></td>
 				</tr>
-				<tr>
+				<tr class="cem0808-chat_form-submit">
 						<td></td>
 						<td colspan="6"><input type="submit" value="Отправить" name="send_artist_message" /></td>
 						<td></td>
 				</tr>
 				</form>
 			 </table>
+            <style type="text/css">
+                table.cem0808-chat { height: 600px; }
+                tr.cem0808-chat_title { height: 53px; }
+                tr.cem0808-chat_form-field { height: 100px; }
+                tr.cem0808-chat_form-submit { height: 30px; }
+                .table tbody tr.cem0808-chat_messages:hover td { background: white; }
+                td.cem0808-chat_messages_content { overflow: auto; }
+                .table .table { margin-bottom: 0; }
+                .table tbody tr.cem0808-chat_messages td.cem0808-chat_messages_wrap { padding: 0; height: 417px; }
+                div.cem0808-chat_messages_content {
+                    height: 100%;
+                    width: 100%;
+                    background: red;
+                    overflow: auto;
+                }
+                .table tbody .table tbody tr:hover td { background: #F5F5F5; }
+            </style>
 			</div>
 
             <script type="javascript/template" id="chat_message_template">
@@ -575,6 +600,8 @@
             </script>
 
             <script type="text/javascript">
+            var chat_height = $('#chat_scroll .table').height();
+            $('#chat_scroll').animate({scrollTop: chat_height}, 0);
             var interval = 3000,
                     last_id = {{ last_id }},
                     chat_message_template = $("#chat_message_template").text();
@@ -596,6 +623,7 @@
                                         .replace('#MESSAGE#', chat_message.message)
                                         .replace('#TIME#', chat_message.time);
                                 $(new_messages_html).insertAfter($("#chat_messages").find(".chat_message").last());
+                                $('#chat_scroll').animate({scrollTop: chat_height}, 800);
                             }
                         }
                 });
